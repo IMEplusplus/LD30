@@ -52,3 +52,5 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+Assets/Scripts/Tests.cs
+Assets/Scripts/Tests.cs.meta
