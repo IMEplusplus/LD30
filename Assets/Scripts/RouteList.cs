@@ -8,6 +8,16 @@ public class RouteList : MonoBehaviour {
 	public List<Route> routes;
     private Airport from = new Airport();
     private Airport to = new Airport();
+
+    private AirportList airports;
+
+    void Start()
+    {
+        airports = GameObject.FindObjectOfType<AirportList>();
+        if (airports == null)
+            Debug.Log("AirportList not found!");
+    }
+
 	void Update () 
 	{
 	    if (Input.GetMouseButtonDown(0))
@@ -19,12 +29,12 @@ public class RouteList : MonoBehaviour {
     private void SetRoute()
     {
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        var obj = GameObject.Find("Airports");
-        if (obj == null) return;
+        //var obj = GameObject.Find("Airports");
+        //if (obj == null) return;
 
-        var airportList = obj.GetComponent<AirportList>().airports;
+        //var airportList = obj.GetComponent<AirportList>().airports;
 
-        SetAirport(airportList, mousePosition);        
+        SetAirport(airports.available, mousePosition);        
     }
 
     private void SetAirport(List<Airport> airportList, Vector3 mousePosition)
