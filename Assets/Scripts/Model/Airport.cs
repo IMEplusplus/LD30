@@ -6,6 +6,7 @@ public class Airport : MonoBehaviour
 {
     //public int id;
     static int MAX_CAPACITY = 1000;
+    private const int CIRCLE_RADIUS = 30;
 
     public List<Plane> PlaneList;
 
@@ -19,4 +20,12 @@ public class Airport : MonoBehaviour
     {
         
     }
+
+    public bool HaveClicked(Vector3 clickPosition)
+    {
+        var circleCenter = transform.position;
+        var clickRadius = Vector3.Distance(circleCenter, clickPosition);
+        return clickRadius < CIRCLE_RADIUS;
+    }
+
 }

@@ -6,13 +6,14 @@ using System.Collections.Generic;
 public class RouteList : MonoBehaviour {
 
 	public List<Route> routes;
-    private Airport from = new Airport();
-    private Airport to = new Airport();
+    private Airport from;
+    private Airport to;
 
     private AirportList airports;
 
     void Start()
     {
+        routes = new List<Route>();
         airports = GameObject.FindObjectOfType<AirportList>();
         if (airports == null)
             Debug.Log("AirportList not found!");
@@ -35,10 +36,10 @@ public class RouteList : MonoBehaviour {
 
     private void SetAirport(List<Airport> airportList, Vector3 mousePosition)
     {
-        if (airportList.All(airport => airport.transform.position != mousePosition)) return;
-        var selectedAirport = airportList.First(airport => airport.transform.position == mousePosition);
+        if (airportList.All(airport => !airport.HaveClicked(mousePosition))) return;
+        var selectedAirport = airportList.First(airport => airport.HaveClicked(mousePosition));
 
-        if (from == new Airport())
+        if (from == null)
         {
             from = selectedAirport;
             from.ChangeAnimation(true);
@@ -46,7 +47,7 @@ public class RouteList : MonoBehaviour {
         else if (from == selectedAirport)
         {
             from.ChangeAnimation(false);
-            from = new Airport();
+            from = null;
 
         }
         else
@@ -62,8 +63,8 @@ public class RouteList : MonoBehaviour {
             }
             from.ChangeAnimation(false);
             to.ChangeAnimation(false);
-            from = new Airport();
-            to = new Airport();
+            from = null;
+            to = null;
         }
     }
 }
