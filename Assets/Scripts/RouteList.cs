@@ -46,11 +46,14 @@ public class RouteList : MonoBehaviour {
         else
         {
             to = selectedAirport;
-            routes.Add(new Route
+            if (!routes.Any(route => route.from == from && route.to == to))
             {
-                from = from,
-                to = to
-            });
+                routes.Add(new Route
+                {
+                    from = from,
+                    to = to
+                });
+            }
             from.ChangeAnimation(false);
             to.ChangeAnimation(false);
             from = new Airport();
