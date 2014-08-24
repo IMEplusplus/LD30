@@ -4,5 +4,10 @@ using System.Collections.Generic;
 
 public class AirportList : MonoBehaviour
 {
-    public List<Airport> airports;
+    public Airport[] airports;
+
+    void Start()
+    {
+        airports = GetComponentsInChildren<Airport>();
+    }
 }
