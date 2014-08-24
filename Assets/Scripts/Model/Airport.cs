@@ -13,4 +13,10 @@ public class Airport : MonoBehaviour
 
     public int passengers = 0;
 	public int capacity = MAX_CAPACITY;
+
+
+    public void ChangeAnimation(bool isSelected)
+    {
+        
+    }
 }
