@@ -4,19 +4,26 @@ using System.Collections.Generic;
 
 public class Circle : MonoBehaviour
 {
-    public Airport airport;
-    public double size;
+    Airport airport;
+    float size;
 
 	// Use this for initialization
 	void Start ()
     {
+        airport = GetComponentInParent<Airport>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        Vector3 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        newPos.z = 0;
-        transform.position = newPos;
+        if (airport.capacity != 0)
+        {
+            size = (float)airport.passengers / airport.capacity;
+            transform.localScale = new Vector3(size, size, 1.0f);
+        }
+        else
+        {
+            Debug.Log("Capacidade zero!!");
+        }
 	}
 }

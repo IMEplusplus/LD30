@@ -8,18 +8,7 @@ public class Route : MonoBehaviour {
 		Low, High
 	}
 
-	public int Id { get; set; }
-	public Airport From { get; set; }
-	public Airport To { get; set; }
-	public RouteHeight Height { get; set; }
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public Airport from;
+    public Airport to;
+    public RouteHeight height;
 }
