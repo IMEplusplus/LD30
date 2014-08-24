@@ -29,10 +29,6 @@ public class RouteList : MonoBehaviour {
     private void SetRoute()
     {
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //var obj = GameObject.Find("Airports");
-        //if (obj == null) return;
-
-        //var airportList = obj.GetComponent<AirportList>().airports;
 
         SetAirport(airports.available, mousePosition);        
     }
