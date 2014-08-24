@@ -2,17 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Airport : MonoBehaviour {
+public class Airport : MonoBehaviour
+{
+    //public int id;
 
-	public int Id { get; set; }
-	
-	public List<Plane> PlaneList { get; set; }
-	
-	public Dictionary<Airport,int> AirportPassengerCountDictionary { get; set; } 
-	
-	public Vector2 Position { get; set; }
-	
-	public readonly int Capacity;
+    public List<Plane> PlaneList;
+
+    public Dictionary<Airport, int> AirportPassengerCountDictionary;
+
+	public int capacity;
 	
 
 	// Use this for initialization
