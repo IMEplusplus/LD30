@@ -15,10 +15,26 @@ public class Airport : MonoBehaviour
     public int passengers = 0;
 	public int capacity = MAX_CAPACITY;
 
+    private GameObject pin, pinSelected;
+
+    void Start()
+    {
+        pin = transform.FindChild("Pin").gameObject;
+        pinSelected = transform.FindChild("Pin Select").gameObject;
+    }
 
     public void ChangeAnimation(bool isSelected)
     {
-        
+        if (isSelected)
+        {
+            pin.SetActive(false);
+            pinSelected.SetActive(true);
+        }
+        else
+        {
+            pin.SetActive(true);
+            pinSelected.SetActive(false);
+        }
     }
 
     public bool HaveClicked(Vector3 clickPosition)
