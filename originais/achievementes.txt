@@ -1,0 +1,8 @@
+achievements:
+- controlador de voo de carreira: passar mais de x minutos sem morrer
+- malabarista: possuir mais de x pontes aéreas operando paralelamente
+- fila do SUS: acumular mais de x pessoas nos aeroportos
+- pau-de-arara: transportar mais de x pessoas.
+- boob's horn: clicar mais de x vezes nos peitos da aeromoça.
+- avião perdido: ligar qualquer país ao triânngulo das bermudas
+- HUE: ligar brasil a mais de x países sem necessidade just for the lulz
