@@ -22,8 +22,8 @@ public class RouteList : MonoBehaviour {
         var obj = GameObject.Find("Airports");
         if (obj == null) return;
 
-        var airportList = obj.GetComponent<AirportList>().airports;
-
+        var airportList = obj.GetComponent<AirportList>().available;
+        
         SetAirport(airportList, mousePosition);        
     }
 
