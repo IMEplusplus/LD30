@@ -58,7 +58,8 @@ public class RouteList : MonoBehaviour {
         else
         {
             to = selectedAirport;
-            if (!routes.Any(route => route.from == from && route.to == to))
+            if (!routes.Any(route => route.from == from && route.to == to) &&
+                !routes.Any(route => route.from == to && route.to == from))
                 CreateNewRoute(from, to, clickHeight);
 
             from.ChangeAnimation(false);
