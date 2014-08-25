@@ -4,16 +4,13 @@ using System.Collections;
 
 public class PlaneList : MonoBehaviour
 {
+    public List<Plane> planes = new List<Plane>();
 
-    public List<Plane> planes;
-    //private RouteList routes;
-    
-    void Start() 
+    public void Reset()
     {
-	
-        planes = new List<Plane>();
-        //routes = GameObject.FindObjectOfType<RouteList>();
-
+        foreach (var plane in planes)
+            plane.GetComponent<SelfPoolScript>().PoolObject();
+        planes.Clear();
     }
 
     void Update()

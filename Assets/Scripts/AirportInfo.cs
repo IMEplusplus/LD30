@@ -17,13 +17,19 @@ public class AirportInfo : MonoBehaviour
     private List<GUIText> names = new List<GUIText>();
     private List<GUIText> passengers = new List<GUIText>();
 
+    private Player player;
+
     void Start()
     {
+        player = GameObject.FindObjectOfType<Player>();
         airports = GameObject.FindObjectOfType<AirportList>();
     }
 
 	void Update () 
     {
+        if (player.state != Player.GameState.Play)
+            return;
+
         ShowAirportInfo();
 	}
 
