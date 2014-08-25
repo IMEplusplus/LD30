@@ -48,7 +48,6 @@ public class RouteList : MonoBehaviour {
         {
             from.ChangeAnimation(false);
             from = null;
-
         }
         else
         {
