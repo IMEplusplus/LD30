@@ -11,5 +11,4 @@ public class Route : MonoBehaviour {
     public Airport from;
     public Airport to;
     public RouteHeight height;
-
 }

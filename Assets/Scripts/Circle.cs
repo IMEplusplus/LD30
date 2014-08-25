@@ -27,7 +27,6 @@ public class Circle : MonoBehaviour
             size = min + (1 - min) * ratio;
             transform.localScale = new Vector3(size, size, 1.0f);
 
-            //var grad = Constants.instance.circleInitialColor - Constants.instance.circleFinalColor;
             var grad = Constants.instance.circleFinalColor - Constants.instance.circleInitialColor;
             sprite.color = Constants.instance.circleInitialColor + ratio * grad;
         }
