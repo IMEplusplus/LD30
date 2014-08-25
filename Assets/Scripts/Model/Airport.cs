@@ -69,6 +69,12 @@ public class Airport : MonoBehaviour
             return;
         }
         var airportIndex = new Random().Next(0, avaiableAirports.Count);
+        
+        
+        if (airportIndex == avaiableAirports.IndexOf(this))
+        {
+            airportIndex = (airportIndex + 1) % avaiableAirports.Count;
+        }
         var airportTo = avaiableAirports[airportIndex];
         Debug.Log("Airport: " + gameObject.name + " destination: " + airportTo.gameObject.name + " passengers: " + passengers + " newPassengers: " + newPassengers + " capacity: " + capacity);
         if (AirportPassengerCountDictionary.ContainsKey(airportTo))
