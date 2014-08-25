@@ -15,18 +15,35 @@ public class RouteList : MonoBehaviour {
 
     private SpriteRenderer line;
 
+    private Player player;
+
     void Start()
     {
+        player = GameObject.FindObjectOfType<Player>();
+
         routes = new List<Route>();
         airports = GameObject.FindObjectOfType<AirportList>();
         if (airports == null)
             Debug.Log("AirportList not found!");
 
         line = transform.Find("Line").GetComponent<SpriteRenderer>();
+
+        //Reset();
+    }
+
+    public void Reset()
+    {
+        foreach (var route in routes)
+            route.GetComponent<SelfPoolScript>().PoolObject();
+
+        routes.Clear();
     }
 
 	void Update () 
 	{
+        if (player.state != Player.GameState.Play)
+            return;
+
         // Line to mouse
         if (from != null)
         {

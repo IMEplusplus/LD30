@@ -24,6 +24,8 @@ public class Airport : MonoBehaviour
 
     private Circle circle;
 
+    private Player player;
+
     private bool Active
     {
         get { return gameObject.activeSelf; }
@@ -33,6 +35,8 @@ public class Airport : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindObjectOfType<Player>();
+
         circle = transform.FindChild("Circle").GetComponent<Circle>();
 
         capacity = Constants.instance.airportCapacity;
@@ -40,14 +44,11 @@ public class Airport : MonoBehaviour
         pin = transform.FindChild("Pin").gameObject;
         pinSelected = transform.FindChild("Pin Select").gameObject;
 
-        AirportPassengerCountDictionary = new Dictionary<Airport, int>();
         var airports = GameObject.FindObjectOfType<AirportList>();
         if (airports != null)
         {
             availableAirports = airports.available;
         }
-
-        timer = Constants.instance.airportNewPassengersTimer;
 
         var routes = GameObject.FindObjectOfType<RouteList>();
         if (routes != null)
@@ -60,10 +61,21 @@ public class Airport : MonoBehaviour
         {
             availablePlanes = planeList.planes;
         }
+
+        Reset();
+    }
+
+    public void Reset()
+    {
+        AirportPassengerCountDictionary = new Dictionary<Airport, int>();
+        timer = Constants.instance.airportNewPassengersTimer;
     }
 
     void Update()
     {
+        if (player.state != Player.GameState.Play)
+            return;
+
         timer -= Time.deltaTime;
         if (timer <= 0.0f)
         {
@@ -75,12 +87,12 @@ public class Airport : MonoBehaviour
 
     void AddPassengers()
     {
-        if (!Active) return;
+        //if (!Active) return;
         var newPassengers = new Random().Next(Constants.instance.passengersMin, Constants.instance.passengersMax);
 
         if (passengers + newPassengers >= capacity)
         {
-            //TODO: O que fazer se estourar a capacidade
+            player.ChangeState();
             return;
         }
 
@@ -107,7 +119,7 @@ public class Airport : MonoBehaviour
 
     void Fly()
     {
-        if (!Active) return;
+        //if (!Active) return;
 
         var airportsWithRoutesAndPassengersToGo = availableRoutes
             .Where(route => route.from == this || route.to == this)

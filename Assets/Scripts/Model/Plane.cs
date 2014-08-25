@@ -4,12 +4,14 @@ using System.Collections;
 
 public class Plane : MonoBehaviour {
 
-	private int capacity;
+	//private int capacity;
     public Airport from;
     public Airport to;
     public Vector3 position;
 
     private List<Plane> availablePlanes;
+
+    private Player player;
 
     private bool Active
     {
@@ -18,6 +20,8 @@ public class Plane : MonoBehaviour {
     
 	void Start () 
     {
+        player = GameObject.FindObjectOfType<Player>();
+
         var planes = GameObject.FindObjectOfType<PlaneList>();
         if (planes != null)
         {
@@ -27,6 +31,9 @@ public class Plane : MonoBehaviour {
 	
 	void Update ()
 	{
+        if (player.state != Player.GameState.Play)
+            return;
+
 	    Translate();
 	}
 
@@ -39,6 +46,8 @@ public class Plane : MonoBehaviour {
 
         if ((transform.position - to.transform.position).sqrMagnitude <= arriveDist * arriveDist)
         {
+            player.AddPassengers(Constants.instance.passengersPerFlight);
+
             availablePlanes.Remove(this);
             gameObject.GetComponent<SelfPoolScript>().PoolObject();
             return;

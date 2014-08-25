@@ -1,19 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Title : MonoBehaviour {
+public class Title : MonoBehaviour
+{
+    private Player player;
 
-	// Use this for initialization
-	void Start () {
+    void Start()
+    {
+        player = GameObject.FindObjectOfType<Player>();
+    }
 	
-	}
-	
-	// Update is called once per frame
 	void Update () 
     {
+        if (player.state != Player.GameState.Title)
+            return;
+
         if (Input.anyKeyDown)
         {
-            gameObject.SetActive(false);
+            player.ChangeState();
         }
 	}
 }

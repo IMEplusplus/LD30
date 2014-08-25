@@ -12,15 +12,25 @@ public class AirportList : MonoBehaviour
 
     public float timer = 30f;
 
+    private Player player;
+
     void Start()
+    {
+        player = GameObject.FindObjectOfType<Player>();
+
+        airports = GetComponentsInChildren<Airport>();
+    }
+
+    public void Reset()
     {
         timer = Constants.instance.newAirportTimer;
 
-        airports = GetComponentsInChildren<Airport>();
         available.Clear();
+        hidden.Clear();
 
         foreach (Airport a in airports)
         {
+            a.Reset();
             a.gameObject.SetActive(false);
             hidden.Add(a);
         }
@@ -36,6 +46,9 @@ public class AirportList : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (player.state != Player.GameState.Play)
+            return;
+
         timer -= Time.fixedDeltaTime;
         if (timer <= 0f)
         {
