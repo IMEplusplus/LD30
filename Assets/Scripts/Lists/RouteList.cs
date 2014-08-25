@@ -42,7 +42,6 @@ public class RouteList : MonoBehaviour {
             var dist = direction.magnitude;
 
             var width = Constants.instance.lineSize.x;
-            Debug.Log(width);
             line.transform.localScale = new Vector3(dist / width, 0.5f, 1.0f);
 
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -118,7 +117,6 @@ public class RouteList : MonoBehaviour {
         var dist = direction.magnitude;
 
         var line = newRoute.transform.FindChild("Line");
-        //var width = line.GetComponent<SpriteRenderer>().bounds.size.x;
         var width = Constants.instance.lineSize.x;
         line.transform.localScale = new Vector3(dist / width, 0.5f, 1.0f);
 

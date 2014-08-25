@@ -11,10 +11,9 @@ public class Title : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        //if (Input.anyKeyDown)
-        //{
-        //    gameObject.SetActive(false);
-        //}
-
+        if (Input.anyKeyDown)
+        {
+            gameObject.SetActive(false);
+        }
 	}
 }
