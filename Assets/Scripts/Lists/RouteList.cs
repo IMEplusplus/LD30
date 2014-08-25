@@ -94,7 +94,13 @@ public class RouteList : MonoBehaviour {
             to = selectedAirport;
             if (!routes.Any(route => route.from == from && route.to == to) &&
                 !routes.Any(route => route.from == to && route.to == from))
+            {
                 CreateNewRoute(from, to, clickHeight);
+            }
+            else
+            {
+                DestroyRoute(from, to);
+            }
 
             from.ChangeAnimation(false);
             to.ChangeAnimation(false);
@@ -126,5 +132,14 @@ public class RouteList : MonoBehaviour {
         line.GetComponent<SpriteRenderer>().color = height == Route.RouteHeight.Low ? Constants.instance.routeLowColor :
                                                                                       Constants.instance.routeHighColor;
         routes.Add(newRoute);
+    }
+
+    private void DestroyRoute(Airport a1, Airport a2)
+    {
+        var routeToDestroy = routes.Where(route => route.from == a1 && route.to == a2 ||
+                                                   route.from == a2 && route.to == a1)
+                                   .First();
+        routes.Remove(routeToDestroy);
+        routeToDestroy.GetComponent<SelfPoolScript>().PoolObject();
     }
 }
