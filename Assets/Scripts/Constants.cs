@@ -24,6 +24,7 @@ public class Constants : MonoBehaviour
 
     public int passengersMin = 5;
     public int passengersMax = 10;
+    public int passengersPerFlight = 50;
 
     void OnEnable()
     {
