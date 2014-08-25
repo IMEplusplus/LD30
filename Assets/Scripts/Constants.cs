@@ -13,7 +13,6 @@ public class Constants : MonoBehaviour
 
     public int airportCapacity = 1000;
 
-    public int passengersPerFlight = 50;
     public float airportMinCircle = 0.3f;
     public float airportNewPassengersTimer = 1f;
     public float newAirportTimer = 30f;
