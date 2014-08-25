@@ -25,7 +25,7 @@ public class RouteList : MonoBehaviour {
 	    {
             SetRoute(Route.RouteHeight.Low);
 	    }
-        else if (Input.GetMouseButtonDown(0))
+        else if (Input.GetMouseButtonDown(1))
         {
             SetRoute(Route.RouteHeight.High);
         }
