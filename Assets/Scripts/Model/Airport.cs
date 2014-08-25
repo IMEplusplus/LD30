@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Airport : MonoBehaviour
 {
-    //public int id;
     static int MAX_CAPACITY = 1000;
 
     [SerializeField]
