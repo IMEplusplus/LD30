@@ -13,7 +13,7 @@ public class Airport : MonoBehaviour
     {
         get { return AirportPassengerCountDictionary.Any() ? AirportPassengerCountDictionary.Values.Sum() : 0; }
     }
-	public int capacity = 10;
+	public int capacity = Constants.instance.airportCapacity;
 
 
     private GameObject pin, pinSelected;
