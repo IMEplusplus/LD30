@@ -44,12 +44,14 @@ public class Airport : MonoBehaviour
         {
             avaiableAirports = airports.available;
         }
+
+        timer = Constants.instance.airportNewPassengersTimer;
+
         var routes = GameObject.FindObjectOfType<RouteList>();
         if (routes != null)
         {
             avaiableRoutes = routes.routes;
         }
-
     }
 
     void Update()
@@ -59,14 +61,14 @@ public class Airport : MonoBehaviour
         {
             AddPassengers();
             Fly();
-            timer = 1.0f;
+            timer = Constants.instance.airportNewPassengersTimer;
         }
     }
 
     void AddPassengers()
     {
         if (!Active) return;
-        var newPassengers = new Random().Next(5,10);
+        var newPassengers = new Random().Next(Constants.instance.passengersMin, Constants.instance.passengersMax);
         
         if (passengers + newPassengers >= capacity)
         {
@@ -143,9 +145,7 @@ public class Airport : MonoBehaviour
         var vectorDiff = circleCenter - mousePosition;
         vectorDiff.z = 0;
 
-        var width = Constants.instance.circleSize.x * circle.size / 2.0f;
-        var radius = Constants.instance.airportMinCircle;
-        radius = width < radius ? radius : width;
+        var radius = Constants.instance.circleSize.x * circle.size / 2.0f;
         return vectorDiff.sqrMagnitude < radius * radius;
     }
 
