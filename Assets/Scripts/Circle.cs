@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class Circle : MonoBehaviour
 {
-    Airport airport;
-    float size;
+    private Airport airport;
+    public float size;
 
 	// Use this for initialization
 	void Start ()

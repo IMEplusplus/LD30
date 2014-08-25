@@ -6,27 +6,23 @@ using Random = System.Random;
 
 public class Airport : MonoBehaviour
 {
-    static int MAX_CAPACITY = 1000;
-
-    [SerializeField]
-    private float CIRCLE_RADIUS = 0.3f;
-
-
     public List<Plane> PlaneList;
-
     public Dictionary<Airport, int> AirportPassengerCountDictionary;
 
     public int passengers
     {
         get { return AirportPassengerCountDictionary.Any() ? AirportPassengerCountDictionary.Values.Sum() : 0; }
     }
-    public int capacity = MAX_CAPACITY;
+	public int capacity = 10;
+
 
     private GameObject pin, pinSelected;
     private List<Airport> avaiableAirports;
     private List<Route> avaiableRoutes;
 
-    private bool active
+    private Circle circle;
+
+    private bool Active
     {
         get { return gameObject.activeSelf; }
     }
@@ -35,6 +31,10 @@ public class Airport : MonoBehaviour
 
     void Start()
     {
+        circle = transform.FindChild("Circle").GetComponent<Circle>();
+
+        capacity = 10;//Constants.instance.airportCapacity;
+
         pin = transform.FindChild("Pin").gameObject;
         pinSelected = transform.FindChild("Pin Select").gameObject;
 
@@ -61,16 +61,13 @@ public class Airport : MonoBehaviour
             Fly();
             timer = 1.0f;
         }
-
-
-
     }
 
     void AddPassengers()
     {
-        if (!active) return;
-        var newPassengers = new Random().Next(5, 10);
-
+        if (!Active) return;
+        var newPassengers = new Random().Next(5,10);
+        
         if (passengers + newPassengers >= capacity)
         {
             //TODO: O que fazer se estourar a capacidade
@@ -84,7 +81,7 @@ public class Airport : MonoBehaviour
             airportIndex = (airportIndex + 1) % avaiableAirports.Count;
         }
         var airportTo = avaiableAirports[airportIndex];
-        Debug.Log("Airport: " + gameObject.name + " destination: " + airportTo.gameObject.name + " passengers: " + passengers + " newPassengers: " + newPassengers + " capacity: " + capacity);
+        //Debug.Log("Airport: " + gameObject.name + " destination: " + airportTo.gameObject.name + " passengers: " + passengers + " newPassengers: " + newPassengers + " capacity: " + capacity);
         if (AirportPassengerCountDictionary.ContainsKey(airportTo))
         {
             AirportPassengerCountDictionary[airportTo] += newPassengers;
@@ -141,13 +138,16 @@ public class Airport : MonoBehaviour
         }
     }
 
-    public bool HaveClicked(Vector3 clickPosition)
+    public bool MouseOver(Vector3 mousePosition)
     {
         var circleCenter = transform.position;
-        var vectorDiff = circleCenter - clickPosition;
+        var vectorDiff = circleCenter - mousePosition;
         vectorDiff.z = 0;
 
-        return vectorDiff.sqrMagnitude < CIRCLE_RADIUS * CIRCLE_RADIUS;
+        var width = Constants.instance.circleSize.x * circle.size / 2.0f;
+        var radius = Constants.instance.airportMinCircle;
+        radius = width < radius ? radius : width;
+        return vectorDiff.sqrMagnitude < radius * radius;
     }
 
 }
