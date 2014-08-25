@@ -6,26 +6,22 @@ using Random = System.Random;
 
 public class Airport : MonoBehaviour
 {
-    static int MAX_CAPACITY = 1000;
-
-    [SerializeField]
-    private float CIRCLE_RADIUS = 0.3f;
-
-
     public List<Plane> PlaneList;
-
     public Dictionary<Airport, int> AirportPassengerCountDictionary;
 
     public int passengers
     {
         get { return AirportPassengerCountDictionary.Any() ? AirportPassengerCountDictionary.Values.Sum() : 0; }
     }
-	public int capacity = MAX_CAPACITY;
+
+	public int capacity = 10;
 
     private GameObject pin, pinSelected;
     private List<Airport> avaiableAirports;
 
-    private bool active
+    private Circle circle;
+
+    private bool Active
     {
         get { return gameObject.activeSelf; }
     }
@@ -34,6 +30,10 @@ public class Airport : MonoBehaviour
 
     void Start()
     {
+        circle = transform.FindChild("Circle").GetComponent<Circle>();
+
+        capacity = Constants.instance.airportCapacity;
+
         pin = transform.FindChild("Pin").gameObject;
         pinSelected = transform.FindChild("Pin Select").gameObject;
 
@@ -60,7 +60,7 @@ public class Airport : MonoBehaviour
 
     void AddPassengers()
     {
-        if (!active) return;
+        if (!Active) return;
         var newPassengers = new Random().Next(5,10);
         
         if (passengers + newPassengers >= capacity)
@@ -109,7 +109,10 @@ public class Airport : MonoBehaviour
         var vectorDiff = circleCenter - clickPosition;
         vectorDiff.z = 0;
 
-        return vectorDiff.sqrMagnitude < CIRCLE_RADIUS * CIRCLE_RADIUS;
+        var width = Constants.instance.circleSize.x * circle.size / 2.0f;
+        var radius = Constants.instance.airportMinCircle;
+        radius = width < radius ? radius : width;
+        return vectorDiff.sqrMagnitude < radius * radius;
     }
 
 }
