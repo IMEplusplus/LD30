@@ -13,11 +13,12 @@ public class Airport : MonoBehaviour
     {
         get { return AirportPassengerCountDictionary.Any() ? AirportPassengerCountDictionary.Values.Sum() : 0; }
     }
-
 	public int capacity = 10;
+
 
     private GameObject pin, pinSelected;
     private List<Airport> avaiableAirports;
+    private List<Route> avaiableRoutes;
 
     private Circle circle;
 
@@ -32,7 +33,7 @@ public class Airport : MonoBehaviour
     {
         circle = transform.FindChild("Circle").GetComponent<Circle>();
 
-        capacity = Constants.instance.airportCapacity;
+        capacity = 10;//Constants.instance.airportCapacity;
 
         pin = transform.FindChild("Pin").gameObject;
         pinSelected = transform.FindChild("Pin Select").gameObject;
@@ -45,6 +46,12 @@ public class Airport : MonoBehaviour
         }
 
         timer = Constants.instance.airportNewPassengersTimer;
+
+        var routes = GameObject.FindObjectOfType<RouteList>();
+        if (routes != null)
+        {
+            avaiableRoutes = routes.routes;
+        }
     }
 
     void Update()
@@ -52,7 +59,8 @@ public class Airport : MonoBehaviour
         timer -= Time.deltaTime;
         if (timer <= 0.0f)
         {
-            AddPassengers();    
+            AddPassengers();
+            Fly();
             timer = Constants.instance.airportNewPassengersTimer;
         }
     }
@@ -68,8 +76,8 @@ public class Airport : MonoBehaviour
             return;
         }
         var airportIndex = new Random().Next(0, avaiableAirports.Count);
-        
-        
+
+
         if (airportIndex == avaiableAirports.IndexOf(this))
         {
             airportIndex = (airportIndex + 1) % avaiableAirports.Count;
@@ -87,6 +95,36 @@ public class Airport : MonoBehaviour
 
     }
 
+    void Fly()
+    {
+        int PASSENGERS_PER_FLIGHT = 50;
+        if (!active) return;
+        var airportsWithRoutesAndPassengersToGo = avaiableRoutes
+            .Where(route => route.from == this || route.to == this)
+            .Select(route =>
+            {
+                if (route.from == this) return route.to;
+                if (route.to == this) return route.from;
+                return null;
+            }).Where(airport =>
+            {
+                var result = AirportPassengerCountDictionary.Where(kvp => kvp.Value > PASSENGERS_PER_FLIGHT)
+                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+                    .ContainsKey(airport);
+                Debug.Log(result);
+                return result;
+            }).ToList();
+        if (airportsWithRoutesAndPassengersToGo.Count == 0) return;
+
+        var airportIndex = new Random().Next(0, airportsWithRoutesAndPassengersToGo.Count);
+        var selectedAirport = airportsWithRoutesAndPassengersToGo[airportIndex];
+        AirportPassengerCountDictionary[selectedAirport] -= PASSENGERS_PER_FLIGHT;
+        if (AirportPassengerCountDictionary[selectedAirport] == 0)
+        {
+            AirportPassengerCountDictionary.Remove(selectedAirport);
+        }
+        Debug.Log("VOOU " + this.gameObject.name + " : " + selectedAirport.gameObject.name);
+    }
 
     public void ChangeAnimation(bool isSelected)
     {
