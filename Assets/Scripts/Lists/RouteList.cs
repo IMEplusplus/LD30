@@ -72,6 +72,19 @@ public class RouteList : MonoBehaviour {
         newRoute.to = to;
         newRoute.height = height;
         newRoute.transform.parent = transform;
+        newRoute.transform.position = from.transform.position;
+
+        var direction = from.transform.position - to.transform.position;
+        direction.z = 0.0f;
+        var dist = direction.magnitude;
+
+        var line = newRoute.transform.FindChild("Line");
+        var width = line.GetComponent<SpriteRenderer>().bounds.size.x;
+        line.transform.localScale = new Vector3(dist / width, 1.0f, 1.0f);
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        line.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
         routes.Add(newRoute);
     }
 }
