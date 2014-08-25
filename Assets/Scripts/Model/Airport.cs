@@ -33,7 +33,7 @@ public class Airport : MonoBehaviour
     {
         circle = transform.FindChild("Circle").GetComponent<Circle>();
 
-        capacity = 10;//Constants.instance.airportCapacity;
+        capacity = Constants.instance.airportCapacity;
 
         pin = transform.FindChild("Pin").gameObject;
         pinSelected = transform.FindChild("Pin Select").gameObject;
@@ -95,8 +95,7 @@ public class Airport : MonoBehaviour
 
     void Fly()
     {
-        int PASSENGERS_PER_FLIGHT = 50;
-        if (!active) return;
+        if (!Active) return;
         var airportsWithRoutesAndPassengersToGo = avaiableRoutes
             .Where(route => route.from == this || route.to == this)
             .Select(route =>
@@ -106,7 +105,7 @@ public class Airport : MonoBehaviour
                 return null;
             }).Where(airport =>
             {
-                var result = AirportPassengerCountDictionary.Where(kvp => kvp.Value > PASSENGERS_PER_FLIGHT)
+                var result = AirportPassengerCountDictionary.Where(kvp => kvp.Value > Constants.instance.passengersPerFlight)
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
                     .ContainsKey(airport);
                 Debug.Log(result);
@@ -116,7 +115,7 @@ public class Airport : MonoBehaviour
 
         var airportIndex = new Random().Next(0, airportsWithRoutesAndPassengersToGo.Count);
         var selectedAirport = airportsWithRoutesAndPassengersToGo[airportIndex];
-        AirportPassengerCountDictionary[selectedAirport] -= PASSENGERS_PER_FLIGHT;
+        AirportPassengerCountDictionary[selectedAirport] -= Constants.instance.passengersPerFlight;
         if (AirportPassengerCountDictionary[selectedAirport] == 0)
         {
             AirportPassengerCountDictionary.Remove(selectedAirport);

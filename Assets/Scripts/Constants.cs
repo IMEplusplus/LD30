@@ -12,6 +12,7 @@ public class Constants : MonoBehaviour
     public Vector3 circleSize;
 
     public int airportCapacity = 1000;
+    public int passengersPerFlight = 50;
     public float airportMinCircle = 0.3f;
 
     public Color routeLowColor = new Color(0.05f, 0.15f, 0.56f, 1f);
