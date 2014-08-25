@@ -11,6 +11,8 @@ public class RouteList : MonoBehaviour {
 
     private AirportList airports;
 
+    private Route.RouteHeight clickHeight = Route.RouteHeight.Low;
+
     void Start()
     {
         routes = new List<Route>();
@@ -46,6 +48,7 @@ public class RouteList : MonoBehaviour {
         {
             from = selectedAirport;
             from.ChangeAnimation(true);
+            clickHeight = height;
         }
         else if (from == selectedAirport)
         {
@@ -56,7 +59,7 @@ public class RouteList : MonoBehaviour {
         {
             to = selectedAirport;
             if (!routes.Any(route => route.from == from && route.to == to))
-                CreateNewRoute(from, to, height);
+                CreateNewRoute(from, to, clickHeight);
 
             from.ChangeAnimation(false);
             to.ChangeAnimation(false);
@@ -84,6 +87,9 @@ public class RouteList : MonoBehaviour {
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         line.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        line.GetComponent<SpriteRenderer>().color = height == Route.RouteHeight.Low ? Constants.instance.routeLowColor :
+                                                                                      Constants.instance.routeHighColor;
 
         routes.Add(newRoute);
     }
