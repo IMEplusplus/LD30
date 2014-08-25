@@ -41,8 +41,8 @@ public class RouteList : MonoBehaviour {
 
     private void SetAirport(List<Airport> airportList, Vector3 mousePosition, Route.RouteHeight height)
     {
-        if (airportList.All(airport => !airport.HaveClicked(mousePosition))) return;
-        var selectedAirport = airportList.First(airport => airport.HaveClicked(mousePosition));
+        if (airportList.All(airport => !airport.MouseOver(mousePosition))) return;
+        var selectedAirport = airportList.First(airport => airport.MouseOver(mousePosition));
 
         if (from == null)
         {

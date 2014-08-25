@@ -103,10 +103,10 @@ public class Airport : MonoBehaviour
         }
     }
 
-    public bool HaveClicked(Vector3 clickPosition)
+    public bool MouseOver(Vector3 mousePosition)
     {
         var circleCenter = transform.position;
-        var vectorDiff = circleCenter - clickPosition;
+        var vectorDiff = circleCenter - mousePosition;
         vectorDiff.z = 0;
 
         var width = Constants.instance.circleSize.x * circle.size / 2.0f;
