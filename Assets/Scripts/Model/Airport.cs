@@ -27,7 +27,7 @@ public class Airport : MonoBehaviour
 
     private bool active
     {
-        get { return gameObject.active; }
+        get { return gameObject.activeSelf; }
     }
 
     float timer = 1.0f;
