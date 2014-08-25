@@ -13,7 +13,7 @@ public class Airport : MonoBehaviour
     {
         get { return AirportPassengerCountDictionary.Any() ? AirportPassengerCountDictionary.Values.Sum() : 0; }
     }
-	public int capacity = Constants.instance.airportCapacity;
+	public int capacity = 1000;
 
 
     private GameObject pin, pinSelected;
@@ -83,7 +83,9 @@ public class Airport : MonoBehaviour
             airportIndex = (airportIndex + 1) % avaiableAirports.Count;
         }
         var airportTo = avaiableAirports[airportIndex];
+
         //Debug.Log("Airport: " + gameObject.name + " destination: " + airportTo.gameObject.name + " passengers: " + passengers + " newPassengers: " + newPassengers + " capacity: " + capacity);
+        
         if (AirportPassengerCountDictionary.ContainsKey(airportTo))
         {
             AirportPassengerCountDictionary[airportTo] += newPassengers;

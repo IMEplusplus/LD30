@@ -8,18 +8,14 @@ public class Circle : MonoBehaviour
     public float size;
 
     SpriteRenderer sprite;
-
-    void OnEnable()
-    {
-        size = Constants.instance.circleMinSize;
-
-        sprite = gameObject.GetComponent<SpriteRenderer>();
-        sprite.color = Constants.instance.circleInitialColor;
-    }
 	
 	void Start ()
     {
         airport = GetComponentInParent<Airport>();
+        size = Constants.instance.circleMinSize;
+
+        sprite = gameObject.GetComponent<SpriteRenderer>();
+        sprite.color = Constants.instance.circleInitialColor;
 	}
 	
 	void Update ()
