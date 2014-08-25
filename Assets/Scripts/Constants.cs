@@ -6,10 +6,12 @@ public class Constants : MonoBehaviour
     public static Constants instance { get; private set; }
 
     [SerializeField]
-    SpriteRenderer circle;
+    SpriteRenderer circle, line;
 
     [HideInInspector]
     public Vector3 circleSize;
+    [HideInInspector]
+    public Vector3 lineSize;
 
     public int airportCapacity = 1000;
 
@@ -29,6 +31,10 @@ public class Constants : MonoBehaviour
     public int passengersMax = 10;
     public int passengersPerFlight = 50;
 
+    public float planeArrivalDistance = 0.3f;
+    // Plane velocity has to be less than planeArrivalDistance!!!
+    public float planeVelocity = 0.3f;
+
     public Vector3 labelPosition = new Vector3(0.08f, 0.048f, 0f);
     public Vector3 namePosition = new Vector3(0.06f, 0.048f, 1f);
     public Vector3 passengersPosition = new Vector3(0.11f, 0.048f, 1f);
@@ -43,5 +49,7 @@ public class Constants : MonoBehaviour
     {
         if (circle != null)
             circleSize = circle.bounds.size;
+        if (line != null)
+            lineSize = line.bounds.size;
     }
 }

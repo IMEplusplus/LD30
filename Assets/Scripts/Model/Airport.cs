@@ -20,6 +20,7 @@ public class Airport : MonoBehaviour
     private List<Airport> availableAirports;
     private List<Route> availableRoutes;
     private List<Plane> availablePlanes;
+    private PlaneList planeList;
 
     private Circle circle;
 
@@ -54,10 +55,10 @@ public class Airport : MonoBehaviour
             availableRoutes = routes.routes;
         }
 
-        var planes = GameObject.FindObjectOfType<PlaneList>();
-        if (planes != null)
+        planeList = GameObject.FindObjectOfType<PlaneList>();
+        if (planeList != null)
         {
-            availablePlanes = planes.planes;
+            availablePlanes = planeList.planes;
         }
     }
 
@@ -82,8 +83,8 @@ public class Airport : MonoBehaviour
             //TODO: O que fazer se estourar a capacidade
             return;
         }
-        var airportIndex = new Random().Next(0, availableAirports.Count);
 
+        var airportIndex = new Random().Next(0, availableAirports.Count);
 
         if (airportIndex == availableAirports.IndexOf(this))
         {
@@ -113,7 +114,8 @@ public class Airport : MonoBehaviour
             .Select(route =>
             {
                 if (route.from == this) return route.to;
-                else return route.from;
+                if (route.to == this) return route.from;
+                return null;
             }).Where(airport => AirportPassengerCountDictionary.Where(kvp => kvp.Value >= Constants.instance.passengersPerFlight)
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
                     .ContainsKey(airport)
@@ -131,23 +133,27 @@ public class Airport : MonoBehaviour
             AirportPassengerCountDictionary.Remove(selectedAirport);
         }
 
-        Debug.Log("VOOU " + this.gameObject.name + " : " + selectedAirport.gameObject.name);
+        CreatePlane(selectedAirport);
+
+        //Debug.Log("VOOU " + this.gameObject.name + " : " + selectedAirport.gameObject.name);
     }
 
     private void CreatePlane(Airport to)
     {
         var plane = ObjectPoolScript.instance.GetObjectForType("Plane", false).GetComponent<Plane>();
+
+        plane.transform.parent = planeList.transform;
+        plane.transform.position = transform.position;
         plane.from = this;
         plane.to = to;
 
         var direction = transform.position - to.transform.position;
         direction.z = 0.0f;
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90f;
         plane.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         availablePlanes.Add(plane);
-
     }
 
     public void ChangeAnimation(bool isSelected)

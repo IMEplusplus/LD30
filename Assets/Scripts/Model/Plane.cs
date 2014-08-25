@@ -9,50 +9,43 @@ public class Plane : MonoBehaviour {
     public Airport to;
     public Vector3 position;
 
-    private List<Plane> avaiablePlanes;
+    private List<Plane> availablePlanes;
 
     private bool Active
     {
         get { return gameObject.activeSelf; }
     }
     
-
-    // Use this for initialization
 	void Start () 
     {
         var planes = GameObject.FindObjectOfType<PlaneList>();
         if (planes != null)
         {
-            avaiablePlanes = planes.planes;
+            availablePlanes = planes.planes;
         }
-	
 	}
 	
-	// Update is called once per frame
 	void Update ()
 	{
-	    Arrive();
 	    Translate();
-
 	}
-
-    private void Arrive()
-    {
-        if (!Active) return;
-        if (transform.position == to.transform.position)
-        {
-            avaiablePlanes.Remove(this);
-            gameObject.GetComponent<SelfPoolScript>().PoolObject();
-            
-        }
-    }
 
     private void Translate()
     {
-        if (!Active) return;
-        var direction = from.transform.position - to.transform.position;
+        var direction = to.transform.position - from.transform.position;
         direction.z = 0.0f;
 
-        transform.Translate(direction);
+        var arriveDist = Constants.instance.planeArrivalDistance;
+
+        if ((transform.position - to.transform.position).sqrMagnitude <= arriveDist * arriveDist)
+        {
+            availablePlanes.Remove(this);
+            gameObject.GetComponent<SelfPoolScript>().PoolObject();
+            return;
+        }
+
+        var newPos = transform.position;
+        newPos += direction.normalized * Constants.instance.planeVelocity * Time.deltaTime;
+        transform.position = newPos;
     }
 }

@@ -13,16 +13,49 @@ public class RouteList : MonoBehaviour {
 
     private Route.RouteHeight clickHeight = Route.RouteHeight.Low;
 
+    private SpriteRenderer line;
+
     void Start()
     {
         routes = new List<Route>();
         airports = GameObject.FindObjectOfType<AirportList>();
         if (airports == null)
             Debug.Log("AirportList not found!");
+
+        line = transform.Find("Line").GetComponent<SpriteRenderer>();
     }
 
 	void Update () 
 	{
+        // Line to mouse
+        if (from != null)
+        {
+            if (!line.gameObject.activeSelf)
+            {
+                line.gameObject.SetActive(true);
+                line.transform.position = from.transform.position;
+            }
+
+            var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var direction = line.transform.position - mousePosition;
+            direction.z = 0.0f;
+            var dist = direction.magnitude;
+
+            var width = Constants.instance.lineSize.x;
+            Debug.Log(width);
+            line.transform.localScale = new Vector3(dist / width, 0.5f, 1.0f);
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            line.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            line.color = clickHeight == Route.RouteHeight.Low ? Constants.instance.routeLowColor :
+                                                                Constants.instance.routeHighColor;
+        }
+        else
+        {
+            line.gameObject.SetActive(false);
+        }
+
 	    if (Input.GetMouseButtonDown(0))
 	    {
             SetRoute(Route.RouteHeight.Low);
@@ -35,13 +68,15 @@ public class RouteList : MonoBehaviour {
 
     private void SetRoute(Route.RouteHeight height)
     {
-        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        SetAirport(airports.available, mousePosition, height);        
+        SetAirport(airports.available, height);        
     }
 
-    private void SetAirport(List<Airport> airportList, Vector3 mousePosition, Route.RouteHeight height)
+    private void SetAirport(List<Airport> airportList, Route.RouteHeight height)
     {
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
         if (airportList.All(airport => !airport.MouseOver(mousePosition))) return;
+
         var selectedAirport = airportList.First(airport => airport.MouseOver(mousePosition));
 
         if (from == null)
@@ -83,15 +118,15 @@ public class RouteList : MonoBehaviour {
         var dist = direction.magnitude;
 
         var line = newRoute.transform.FindChild("Line");
-        var width = line.GetComponent<SpriteRenderer>().bounds.size.x;
-        line.transform.localScale = new Vector3(dist / width, 1.0f, 1.0f);
+        //var width = line.GetComponent<SpriteRenderer>().bounds.size.x;
+        var width = Constants.instance.lineSize.x;
+        line.transform.localScale = new Vector3(dist / width, 0.5f, 1.0f);
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         line.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         line.GetComponent<SpriteRenderer>().color = height == Route.RouteHeight.Low ? Constants.instance.routeLowColor :
                                                                                       Constants.instance.routeHighColor;
-
         routes.Add(newRoute);
     }
 }
