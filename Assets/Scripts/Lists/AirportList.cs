@@ -46,6 +46,8 @@ public class AirportList : MonoBehaviour
 
     private void NewAirport()
     {
+        if (hidden.Count <= 0) return;
+
         int rand = Random.Range(0, hidden.Count);
         hidden[rand].gameObject.SetActive(true);
         available.Add(hidden[rand]);
