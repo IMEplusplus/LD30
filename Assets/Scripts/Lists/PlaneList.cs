@@ -6,17 +6,16 @@ public class PlaneList : MonoBehaviour
 {
 
     public List<Plane> planes;
-    private RouteList routes;
-    // Use this for initialization
+    //private RouteList routes;
+    
     void Start() 
     {
 	
         planes = new List<Plane>();
-        routes = GameObject.FindObjectOfType<RouteList>();
+        //routes = GameObject.FindObjectOfType<RouteList>();
 
     }
 
-    // Update is called once per frame
     void Update()
     {
 

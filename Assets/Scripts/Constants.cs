@@ -29,6 +29,11 @@ public class Constants : MonoBehaviour
     public int passengersMax = 10;
     public int passengersPerFlight = 50;
 
+    public Vector3 labelPosition = new Vector3(0.08f, 0.03f, 0f);
+    public Vector3 namePosition = new Vector3(0.06f, 0.03f, 1f);
+    public Vector3 passengersPosition = new Vector3(0.11f, 0.03f, 1f);
+    public float labelDeltaY = -0.045f;
+
     void OnEnable()
     {
         instance = this;

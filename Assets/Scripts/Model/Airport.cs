@@ -17,9 +17,9 @@ public class Airport : MonoBehaviour
 
 
     private GameObject pin, pinSelected;
-    private List<Airport> avaiableAirports;
-    private List<Route> avaiableRoutes;
-    private List<Plane> avaiablePlanes;
+    private List<Airport> availableAirports;
+    private List<Route> availableRoutes;
+    private List<Plane> availablePlanes;
 
     private Circle circle;
 
@@ -43,7 +43,7 @@ public class Airport : MonoBehaviour
         var airports = GameObject.FindObjectOfType<AirportList>();
         if (airports != null)
         {
-            avaiableAirports = airports.available;
+            availableAirports = airports.available;
         }
 
         timer = Constants.instance.airportNewPassengersTimer;
@@ -51,13 +51,13 @@ public class Airport : MonoBehaviour
         var routes = GameObject.FindObjectOfType<RouteList>();
         if (routes != null)
         {
-            avaiableRoutes = routes.routes;
+            availableRoutes = routes.routes;
         }
 
         var planes = GameObject.FindObjectOfType<PlaneList>();
         if (planes != null)
         {
-            avaiablePlanes = planes.planes;
+            availablePlanes = planes.planes;
         }
     }
 
@@ -82,14 +82,14 @@ public class Airport : MonoBehaviour
             //TODO: O que fazer se estourar a capacidade
             return;
         }
-        var airportIndex = new Random().Next(0, avaiableAirports.Count);
+        var airportIndex = new Random().Next(0, availableAirports.Count);
 
 
-        if (airportIndex == avaiableAirports.IndexOf(this))
+        if (airportIndex == availableAirports.IndexOf(this))
         {
-            airportIndex = (airportIndex + 1) % avaiableAirports.Count;
+            airportIndex = (airportIndex + 1) % availableAirports.Count;
         }
-        var airportTo = avaiableAirports[airportIndex];
+        var airportTo = availableAirports[airportIndex];
 
         //Debug.Log("Airport: " + gameObject.name + " destination: " + airportTo.gameObject.name + " passengers: " + passengers + " newPassengers: " + newPassengers + " capacity: " + capacity);
 
@@ -108,7 +108,7 @@ public class Airport : MonoBehaviour
     {
         if (!Active) return;
 
-        var airportsWithRoutesAndPassengersToGo = avaiableRoutes
+        var airportsWithRoutesAndPassengersToGo = availableRoutes
             .Where(route => route.from == this || route.to == this)
             .Select(route =>
             {
@@ -145,7 +145,7 @@ public class Airport : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         plane.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        avaiablePlanes.Add(plane);
+        availablePlanes.Add(plane);
 
     }
 
