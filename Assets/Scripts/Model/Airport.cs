@@ -113,12 +113,12 @@ public class Airport : MonoBehaviour
             .Select(route =>
             {
                 if (route.from == this) return route.to;
-                if (route.to == this) return route.from;
-                return null;
-            }).Where(airport => AirportPassengerCountDictionary.Where(kvp => kvp.Value > Constants.instance.passengersPerFlight)
+                else return route.from;
+            }).Where(airport => AirportPassengerCountDictionary.Where(kvp => kvp.Value >= Constants.instance.passengersPerFlight)
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
                     .ContainsKey(airport)
             ).ToList();
+        
         if (airportsWithRoutesAndPassengersToGo.Count == 0) return;
 
         var airportIndex = new Random().Next(0, airportsWithRoutesAndPassengersToGo.Count);
@@ -126,10 +126,11 @@ public class Airport : MonoBehaviour
 
         AirportPassengerCountDictionary[selectedAirport] -= Constants.instance.passengersPerFlight;
 
-        if (AirportPassengerCountDictionary[selectedAirport] == 0)
+        if (AirportPassengerCountDictionary[selectedAirport] <= 0)
         {
             AirportPassengerCountDictionary.Remove(selectedAirport);
         }
+
         Debug.Log("VOOU " + this.gameObject.name + " : " + selectedAirport.gameObject.name);
     }
 
