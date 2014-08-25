@@ -13,12 +13,13 @@ public class Airport : MonoBehaviour
     {
         get { return AirportPassengerCountDictionary.Any() ? AirportPassengerCountDictionary.Values.Sum() : 0; }
     }
-	public int capacity = 1000;
+    public int capacity = 1000;
 
 
     private GameObject pin, pinSelected;
     private List<Airport> avaiableAirports;
     private List<Route> avaiableRoutes;
+    private List<Plane> avaiablePlanes;
 
     private Circle circle;
 
@@ -52,6 +53,12 @@ public class Airport : MonoBehaviour
         {
             avaiableRoutes = routes.routes;
         }
+
+        var planes = GameObject.FindObjectOfType<PlaneList>();
+        if (planes != null)
+        {
+            avaiablePlanes = planes.planes;
+        }
     }
 
     void Update()
@@ -69,7 +76,7 @@ public class Airport : MonoBehaviour
     {
         if (!Active) return;
         var newPassengers = new Random().Next(Constants.instance.passengersMin, Constants.instance.passengersMax);
-        
+
         if (passengers + newPassengers >= capacity)
         {
             //TODO: O que fazer se estourar a capacidade
@@ -85,7 +92,7 @@ public class Airport : MonoBehaviour
         var airportTo = avaiableAirports[airportIndex];
 
         //Debug.Log("Airport: " + gameObject.name + " destination: " + airportTo.gameObject.name + " passengers: " + passengers + " newPassengers: " + newPassengers + " capacity: " + capacity);
-        
+
         if (AirportPassengerCountDictionary.ContainsKey(airportTo))
         {
             AirportPassengerCountDictionary[airportTo] += newPassengers;
@@ -108,14 +115,10 @@ public class Airport : MonoBehaviour
                 if (route.from == this) return route.to;
                 if (route.to == this) return route.from;
                 return null;
-            }).Where(airport =>
-            {
-                var result = AirportPassengerCountDictionary.Where(kvp => kvp.Value > Constants.instance.passengersPerFlight)
+            }).Where(airport => AirportPassengerCountDictionary.Where(kvp => kvp.Value > Constants.instance.passengersPerFlight)
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
-                    .ContainsKey(airport);
-                Debug.Log(result);
-                return result;
-            }).ToList();
+                    .ContainsKey(airport)
+            ).ToList();
         if (airportsWithRoutesAndPassengersToGo.Count == 0) return;
 
         var airportIndex = new Random().Next(0, airportsWithRoutesAndPassengersToGo.Count);
@@ -128,6 +131,22 @@ public class Airport : MonoBehaviour
             AirportPassengerCountDictionary.Remove(selectedAirport);
         }
         Debug.Log("VOOU " + this.gameObject.name + " : " + selectedAirport.gameObject.name);
+    }
+
+    private void CreatePlane(Airport to)
+    {
+        var plane = ObjectPoolScript.instance.GetObjectForType("Plane", false).GetComponent<Plane>();
+        plane.from = this;
+        plane.to = to;
+
+        var direction = transform.position - to.transform.position;
+        direction.z = 0.0f;
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        plane.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        avaiablePlanes.Add(plane);
+
     }
 
     public void ChangeAnimation(bool isSelected)
