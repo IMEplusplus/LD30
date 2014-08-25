@@ -111,6 +111,9 @@ public class RouteList : MonoBehaviour {
 
     private void CreateNewRoute(Airport from, Airport to, Route.RouteHeight height)
     {
+        if (RouteCrosses(from, to, height))
+            return;
+
         Route newRoute = ObjectPoolScript.instance.GetObjectForType("Route", false).GetComponent<Route>();
         newRoute.from = from;
         newRoute.to = to;
@@ -141,5 +144,53 @@ public class RouteList : MonoBehaviour {
                                    .First();
         routes.Remove(routeToDestroy);
         routeToDestroy.GetComponent<SelfPoolScript>().PoolObject();
+    }
+
+    private bool RouteCrosses(Airport from, Airport to, Route.RouteHeight height)
+    {
+        var x11 = from.transform.position.x;
+        var y11 = from.transform.position.y;
+
+        var x12 = to.transform.position.x;
+        var y12 = to.transform.position.y;
+
+        var A1 = y12 - y11;
+        var B1 = x11 - x12;
+        var C1 = A1 * x11 + B1 * y11;
+
+        foreach (var route in routes)
+        {
+            if (route.height != height)
+                continue;
+
+            if (route.from == from || route.from == to ||
+                route.to == from || route.to == to)
+                continue;
+
+            var x21 = route.from.transform.position.x;
+            var y21 = route.from.transform.position.y;
+
+            var x22 = route.to.transform.position.x;
+            var y22 = route.to.transform.position.y;
+
+            var A2 = y22 - y21;
+            var B2 = x21 - x22;
+            var C2 = A2 * x21 + B2 * y21;
+
+            var det = A1 * B2 - A2 * B1;
+            if (det != 0)
+            {
+                var x = (B2 * C1 - B1 * C2) / det;
+                var y = (A1 * C2 - A2 * C1) / det;
+
+                if (x > Mathf.Min(x11, x12) && x < Mathf.Max(x11, x12) &&
+                    y > Mathf.Min(y11, y12) && y < Mathf.Max(y11, y12) &&
+                    x > Mathf.Min(x21, x22) && x < Mathf.Max(x21, x22) &&
+                    y > Mathf.Min(y21, y22) && y < Mathf.Max(y21, y22))
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
