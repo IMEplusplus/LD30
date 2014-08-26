@@ -25,6 +25,7 @@ public class Airport : MonoBehaviour
     private Circle circle;
 
     private Player player;
+    private Audio audioPlayer;
 
     private bool Active
     {
@@ -36,6 +37,7 @@ public class Airport : MonoBehaviour
     void Start()
     {
         player = GameObject.FindObjectOfType<Player>();
+        audioPlayer = GameObject.FindObjectOfType<Audio>();
 
         circle = transform.FindChild("Circle").GetComponent<Circle>();
 
@@ -166,6 +168,8 @@ public class Airport : MonoBehaviour
         plane.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         availablePlanes.Add(plane);
+
+        audioPlayer.PlayPlane();
     }
 
     public void ChangeAnimation(bool isSelected)

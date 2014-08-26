@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Random = System.Random;
 
 public class AirportList : MonoBehaviour
 {
@@ -13,10 +14,12 @@ public class AirportList : MonoBehaviour
     public float timer = 30f;
 
     private Player player;
+    private Audio audioPlayer;
 
     void Start()
     {
         player = GameObject.FindObjectOfType<Player>();
+        audioPlayer = GameObject.FindObjectOfType<Audio>();
 
         airports = GetComponentsInChildren<Airport>();
     }
@@ -37,7 +40,7 @@ public class AirportList : MonoBehaviour
 
         for (int i = 0; i < initialAirportsQuantity; ++i)
         {
-            int rand = Random.Range(0, hidden.Count);
+            int rand = new Random().Next(0, hidden.Count);
             hidden[rand].gameObject.SetActive(true);
             available.Add(hidden[rand]);
             hidden.RemoveAt(rand);
@@ -61,9 +64,11 @@ public class AirportList : MonoBehaviour
     {
         if (hidden.Count <= 0) return;
 
-        int rand = Random.Range(0, hidden.Count);
+        int rand = new Random().Next(0, hidden.Count);
         hidden[rand].gameObject.SetActive(true);
         available.Add(hidden[rand]);
         hidden.RemoveAt(rand);
+
+        audioPlayer.PlayNewAirport();
     }
 }

@@ -40,6 +40,10 @@ public class Constants : MonoBehaviour
     public Vector3 passengersPosition = new Vector3(0.11f, 0.048f, 1f);
     public float labelDeltaY = -0.028f;
 
+    public float audioRandomMin = 15f;
+    public float audioRandomMax = 25f;
+    public float audioPlaneChance = .20f;
+
     void OnEnable()
     {
         instance = this;
