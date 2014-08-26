@@ -19,6 +19,7 @@ public class GameOver : MonoBehaviour
         if (time)
         {
             time.text = player.timer.ToString("0.00");
+            time.text += " s";
         }
     }
 

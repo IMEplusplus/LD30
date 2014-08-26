@@ -22,6 +22,9 @@ public class Tutorial : MonoBehaviour
 
         foreach (var page in pages)
             page.SetActive(false);
+
+        step = 0;
+        pages[0].SetActive(true);
 	}
 	
 	void Update ()
