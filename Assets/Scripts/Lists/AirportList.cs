@@ -22,6 +22,8 @@ public class AirportList : MonoBehaviour
         audioPlayer = GameObject.FindObjectOfType<Audio>();
 
         airports = GetComponentsInChildren<Airport>();
+
+        initialAirportsQuantity = Constants.instance.airportQntInitial;
     }
 
     public void Reset()

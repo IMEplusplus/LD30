@@ -13,6 +13,7 @@ public class Constants : MonoBehaviour
     [HideInInspector]
     public Vector3 lineSize;
 
+    public int airportQntInitial = 5;
     public int airportCapacity = 1000;
 
     public float airportMinCircle = 0.3f;
@@ -44,7 +45,7 @@ public class Constants : MonoBehaviour
     public float audioRandomMax = 25f;
     public float audioPlaneChance = .20f;
 
-    void OnEnable()
+    void Awake()
     {
         instance = this;
     }

@@ -28,6 +28,9 @@ public class Audio : MonoBehaviour
         if (player.state != Player.GameState.Play)
             return;
 
+        if (voicesSource.isPlaying)
+            voicesSource.Stop();
+
         RingBell();
         Invoke("NewAirport", bell.length);
     }
@@ -37,9 +40,6 @@ public class Audio : MonoBehaviour
         if (player.state != Player.GameState.Play)
             return;
 
-        if (voicesSource.isPlaying)
-            voicesSource.Stop();
-
         voicesSource.clip = newAirport;
         voicesSource.Play();
     }
@@ -48,6 +48,10 @@ public class Audio : MonoBehaviour
     {
         if (player.state != Player.GameState.Play)
             return;
+
+        if (voicesSource.isPlaying)
+            voicesSource.Stop();
+
         RingBell();
         Invoke("Overcrowded", bell.length);
     }
@@ -72,7 +76,6 @@ public class Audio : MonoBehaviour
             return;
 
         var rand = Random.Range(0, planes.Count);
-        Debug.Log(rand);
         planesSource.clip = planes[rand];
         planesSource.Play();
     }

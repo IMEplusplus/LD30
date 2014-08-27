@@ -17,9 +17,13 @@ public class Airport : MonoBehaviour
 
 
     private GameObject pin, pinSelected;
+
     private List<Airport> availableAirports;
     private List<Route> availableRoutes;
     private List<Plane> availablePlanes;
+
+    private AirportList airportList;
+    private RouteList routeList;
     private PlaneList planeList;
 
     private Circle circle;
@@ -34,28 +38,26 @@ public class Airport : MonoBehaviour
 
     float timer = 1.0f;
 
-    void Start()
+    void Awake()
     {
         player = GameObject.FindObjectOfType<Player>();
         audioPlayer = GameObject.FindObjectOfType<Audio>();
 
         circle = transform.FindChild("Circle").GetComponent<Circle>();
 
-        capacity = Constants.instance.airportCapacity;
-
         pin = transform.FindChild("Pin").gameObject;
         pinSelected = transform.FindChild("Pin Select").gameObject;
 
-        var airports = GameObject.FindObjectOfType<AirportList>();
-        if (airports != null)
+        airportList = GameObject.FindObjectOfType<AirportList>();
+        if (airportList != null)
         {
-            availableAirports = airports.available;
+            availableAirports = airportList.available;
         }
 
-        var routes = GameObject.FindObjectOfType<RouteList>();
-        if (routes != null)
+        routeList = GameObject.FindObjectOfType<RouteList>();
+        if (routeList != null)
         {
-            availableRoutes = routes.routes;
+            availableRoutes = routeList.routes;
         }
 
         planeList = GameObject.FindObjectOfType<PlaneList>();
@@ -63,7 +65,11 @@ public class Airport : MonoBehaviour
         {
             availablePlanes = planeList.planes;
         }
+    }
 
+    void Start()
+    {
+        capacity = Constants.instance.airportCapacity;
         Reset();
     }
 
@@ -82,7 +88,7 @@ public class Airport : MonoBehaviour
         if (timer <= 0.0f)
         {
             AddPassengers();
-            Fly();
+            //Fly();
             timer = Constants.instance.airportNewPassengersTimer;
         }
     }
@@ -117,23 +123,58 @@ public class Airport : MonoBehaviour
             AirportPassengerCountDictionary.Add(airportTo, newPassengers);
         }
 
+        if (AirportPassengerCountDictionary[airportTo] >= Constants.instance.passengersPerFlight)
+        {
+            TryToFlyTo(airportTo);
+        }
+    }
+
+    void TryToFlyTo(Airport to)
+    {
+        var canFly = routeList.routes
+            .Any(route => (route.from == this && route.to == to) ||
+                          (route.to == this && route.from == to));
+
+        if (!canFly)
+            return;
+
+        AirportPassengerCountDictionary[to] -= Constants.instance.passengersPerFlight;
+
+        if (AirportPassengerCountDictionary[to] <= 0)
+        {
+            AirportPassengerCountDictionary.Remove(to);
+        }
+
+        CreatePlane(to);
     }
 
     void Fly()
     {
         //if (!Active) return;
 
+        /*
         var airportsWithRoutesAndPassengersToGo = availableRoutes
             .Where(route => route.from == this || route.to == this)
             .Select(route =>
             {
                 if (route.from == this) return route.to;
-                if (route.to == this) return route.from;
-                return null;
+                return route.to;
             }).Where(airport => AirportPassengerCountDictionary.Where(kvp => kvp.Value >= Constants.instance.passengersPerFlight)
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
                     .ContainsKey(airport)
             ).ToList();
+        */
+
+        var airportsWithRoutesAndPassengersToGo = routeList.routes
+            .Where(route => route.from == this || route.to == this)
+            .Select(route =>
+            {
+                if (route.from == this) return route.to;
+                return route.to;
+            }).Where(airport => AirportPassengerCountDictionary.ContainsKey(airport))
+            .Where(airport => AirportPassengerCountDictionary[airport] >= Constants.instance.passengersPerFlight).ToList();
+
+        //Debug.Log(gameObject.name + " " + airportsWithRoutesAndPassengersToGo.Count.ToString());
         
         if (airportsWithRoutesAndPassengersToGo.Count == 0) return;
 
